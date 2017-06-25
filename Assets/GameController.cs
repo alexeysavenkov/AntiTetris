@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour {
 
 	public Transform itemStartPosition, itemNextPosition;
 	private Vector3 itemStartVec, itemNextVec;
+	private int level = 1;
+	private int score = 50;
 
 	public Transform targetTick;
 
@@ -58,11 +60,12 @@ public class GameController : MonoBehaviour {
 				}
 			}
 
-			if (Utils.getChildrenOfGameObject (obj).Any (o => o.transform.position.y + o.transform.lossyScale.y > targetTick.position.y)) {
+			if (Utils.getChildrenOfGameObject (obj).Any (o => o.transform.position.y + o.transform.lossyScale.y * .25f > targetTick.position.y)) {
 				isGameEnd = true;
 			}
 
 			if (isToRemove) {
+				score--;
 				Destroy(obj);
 			} else {
 				objectsByTurnsAfterUnactive.Add (obj, turnsAfterUnactive + 1);
@@ -72,12 +75,24 @@ public class GameController : MonoBehaviour {
 		nextItem = itemGenerator.instantiateRandomItem (itemNextVec);
 		nextItem.GetComponent<Rigidbody2D> ().gravityScale = 0;
 
+
 		if (isGameEnd) {
 			foreach (GameObject obj in objectsByTurnsAfterUnactive.Keys) {
 				Destroy (obj);
 			}
 			objectsByTurnsAfterUnactive.Clear ();
+			score += 30;
+			level++;
+		} else {
+			score--;
 		}
+	}
+
+	public UILabel labelScore, labelLevel;
+
+	private void updateLabels() {
+		labelScore.text = "Score: " + score;
+		labelLevel.text = "Level: " + level;
 	}
 
 	// Use this for initialization
@@ -89,6 +104,8 @@ public class GameController : MonoBehaviour {
 
 		generateNextItem ();
 		generateNextItem ();
+
+		score = 50;
 	}
 	
 	// Update is called once per frame
@@ -100,6 +117,8 @@ public class GameController : MonoBehaviour {
 			var newXValue = Mathf.Abs(value) > 0.001 ? Mathf.Min (8f, Mathf.Max (-8f, rigidBody.velocity.x + value * 2f)) : rigidBody.velocity.x * 0.7f;
 			rigidBody.velocity = new Vector2 (newXValue, rigidBody.velocity.y);
 		}
+
+		updateLabels ();
 	}
 
 	private bool nextItemPending = false;
@@ -119,7 +138,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	private IEnumerator generateNextItemCoroutine() {
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(1.25f / level);
 		generateNextItem ();
 		nextItemPending = false;
 	}
