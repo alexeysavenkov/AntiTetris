@@ -13,6 +13,8 @@ public class GameController : MonoBehaviour {
 	private ItemGenerator itemGenerator;
 	private GameObject currentItem, nextItem;
 
+	private Dictionary<GameObject, int> objectsByTurnsAfterUnactive = new Dictionary<GameObject, int>();
+
 	private void cleanupTransforms() {
 		itemStartVec = itemStartPosition.localPosition;
 		itemNextVec = itemNextPosition.localPosition;
@@ -21,12 +23,40 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void generateNextItem() {
+		if (currentItem != null) {
+			objectsByTurnsAfterUnactive.Add (currentItem, 0);
+		}
+
 		if (nextItem != null) {
+
 			currentItem = nextItem;
 			Debug.Log (nextItem.transform.localPosition);
 			currentItem.transform.localPosition = itemStartVec;
 
 			currentItem.GetComponent<Rigidbody2D> ().gravityScale = 1;
+		}
+
+		var objects = new List<GameObject> (objectsByTurnsAfterUnactive.Keys);
+		//Debug.Log ("cnt " + objects.Count);
+		foreach (GameObject obj in objects) {
+			int turnsAfterUnactive = objectsByTurnsAfterUnactive [obj];
+			objectsByTurnsAfterUnactive.Remove (obj);
+
+			Debug.Log (obj.transform.eulerAngles);
+			bool isToRemove = false;
+			if (turnsAfterUnactive >= 3) {
+				float rotation = obj.transform.eulerAngles.z;
+				//Debug.Log (rotation.z);
+				if (rotation % 90f < 5f || rotation % 90f > 85f) {
+					isToRemove = true;
+				}
+			}
+
+			if (isToRemove) {
+				Destroy(obj);
+			} else {
+				objectsByTurnsAfterUnactive.Add (obj, turnsAfterUnactive + 1);
+			}
 		}
 
 		nextItem = itemGenerator.instantiateRandomItem (itemNextVec);
@@ -46,18 +76,12 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		int movX = 0;
+		float value = Input.GetAxis ("Horizontal");
 
-		if (!nextItemPending) {
-			if (Input.GetKeyDown (KeyCode.RightArrow)) {
-				movX = 1;
-			} else if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-				movX = -1;
-			}
-		}
-
-		if (movX != 0) {
-			currentItem.transform.localPosition = currentItem.transform.localPosition + new Vector3 (movX, 0, 0);
+		if (currentItem != null && !nextItemPending) {
+			var rigidBody = currentItem.GetComponent<Rigidbody2D> ();
+			var newXValue = Mathf.Abs(value) > 0.001 ? Mathf.Min (8f, Mathf.Max (-8f, rigidBody.velocity.x + value * 2f)) : rigidBody.velocity.x * 0.7f;
+			rigidBody.velocity = new Vector2 (newXValue, rigidBody.velocity.y);
 		}
 	}
 
