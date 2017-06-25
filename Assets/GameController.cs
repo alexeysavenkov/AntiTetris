@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -110,15 +111,22 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float value = Input.GetAxis ("Horizontal");
+		float hval = Input.GetAxis ("Horizontal");
+		float vval = Input.GetAxis ("Vertical");
 
 		if (currentItem != null && !nextItemPending) {
 			var rigidBody = currentItem.GetComponent<Rigidbody2D> ();
-			var newXValue = Mathf.Abs(value) > 0.001 ? Mathf.Min (8f, Mathf.Max (-8f, rigidBody.velocity.x + value * 2f)) : rigidBody.velocity.x * 0.7f;
+			var newXValue = Mathf.Abs(hval) > 0.001 ? Mathf.Min (8f, Mathf.Max (-8f, rigidBody.velocity.x + hval * 2f)) : rigidBody.velocity.x * 0.7f;
 			rigidBody.velocity = new Vector2 (newXValue, rigidBody.velocity.y);
+
+			rigidBody.angularVelocity = rigidBody.angularVelocity + vval * 5f;
 		}
 
 		updateLabels ();
+
+		if (score < 0) {
+			SceneManager.LoadScene ("GameOverScene");
+		}
 	}
 
 	private bool nextItemPending = false;
