@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameController : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class GameController : MonoBehaviour {
 
 	public Transform itemStartPosition, itemNextPosition;
 	private Vector3 itemStartVec, itemNextVec;
+
+	public Transform targetTick;
 
 	private ItemGenerator itemGenerator;
 	private GameObject currentItem, nextItem;
@@ -36,6 +39,8 @@ public class GameController : MonoBehaviour {
 			currentItem.GetComponent<Rigidbody2D> ().gravityScale = 1;
 		}
 
+		bool isGameEnd = false;
+
 		var objects = new List<GameObject> (objectsByTurnsAfterUnactive.Keys);
 		//Debug.Log ("cnt " + objects.Count);
 		foreach (GameObject obj in objects) {
@@ -44,12 +49,17 @@ public class GameController : MonoBehaviour {
 
 			Debug.Log (obj.transform.eulerAngles);
 			bool isToRemove = false;
+
 			if (turnsAfterUnactive >= 3) {
 				float rotation = obj.transform.eulerAngles.z;
 				//Debug.Log (rotation.z);
 				if (rotation % 90f < 5f || rotation % 90f > 85f) {
 					isToRemove = true;
 				}
+			}
+
+			if (Utils.getChildrenOfGameObject (obj).Any (o => o.transform.position.y + o.transform.lossyScale.y > targetTick.position.y)) {
+				isGameEnd = true;
 			}
 
 			if (isToRemove) {
@@ -61,6 +71,13 @@ public class GameController : MonoBehaviour {
 
 		nextItem = itemGenerator.instantiateRandomItem (itemNextVec);
 		nextItem.GetComponent<Rigidbody2D> ().gravityScale = 0;
+
+		if (isGameEnd) {
+			foreach (GameObject obj in objectsByTurnsAfterUnactive.Keys) {
+				Destroy (obj);
+			}
+			objectsByTurnsAfterUnactive.Clear ();
+		}
 	}
 
 	// Use this for initialization
@@ -95,6 +112,10 @@ public class GameController : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	private void onLevelEnd() {
+
 	}
 
 	private IEnumerator generateNextItemCoroutine() {

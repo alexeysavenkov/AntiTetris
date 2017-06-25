@@ -12,14 +12,10 @@ public class ItemGenerator : MonoBehaviour {
 	private GameObject[] itemPrototypes;
 
 	private void initItemPrototypes() {
-		this.itemPrototypes = getChildrenOfGameObject (itemPrototypesContainer);
+		this.itemPrototypes = Utils.getChildrenOfGameObject (itemPrototypesContainer);
 	}
 
-	private static GameObject[] getChildrenOfGameObject(GameObject obj) {
-		return Enumerable.Range (0, obj.transform.childCount)
-			.Select (i => obj.transform.GetChild (i).gameObject)
-			.ToArray ();
-	}
+
 
 	private void initColorsByPrototype() {
 		this.colorsByPrototype = 

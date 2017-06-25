@@ -159,6 +159,7 @@
      <Compile Include="Assets\Libraries\GUI\Scripts\UI\UITexture.cs" />
      <Compile Include="Assets\Libraries\GUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\Libraries\GUI\Scripts\UI\UIViewport.cs" />
+     <Compile Include="Assets\Utils.cs" />
      <None Include="Assets\Libraries\GUI\Resources\Shaders\Unlit - Transparent Masked 1.shader" />
      <None Include="Assets\Libraries\GUI\Resources\Shaders\Unlit - Text 2.shader" />
      <None Include="Assets\Libraries\GUI\Resources\Shaders\Unlit - Transparent Masked 2.shader" />
