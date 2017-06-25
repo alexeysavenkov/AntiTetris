@@ -28,17 +28,17 @@ public class ItemGenerator : MonoBehaviour {
 			).GroupBy (x => x.shape).ToDictionary (g => g.Key, g => g.Select(x => x.colour).ToArray());
 	}
 
-	public GameObject instantiateRandomItem(Transform position) {
+	public GameObject instantiateRandomItem(Vector3 position) {
 		GameObject prototype = itemPrototypes [Random.Range (0, itemPrototypes.Length)];
 		Color[] availableColors = colorsByPrototype [prototype];
 		Color color = availableColors [Random.Range (0, availableColors.Length)];
 
 		var newInstance = GameObject.Instantiate (prototype);
-		newInstance.transform.localPosition = position.localPosition;
+		newInstance.transform.localPosition = position;
 		var spriteRenderers = newInstance.GetComponentsInChildren<SpriteRenderer> ().ToList ();
 		Debug.Log (spriteRenderers.Count);
 		spriteRenderers.ForEach ( spriteRenderer => {
-			Debug.Log(spriteRenderer.gameObject.name);
+			//Debug.Log(spriteRenderer.gameObject.name);
 			spriteRenderer.color = color;
 		});
 

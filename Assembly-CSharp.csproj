@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\GameController.cs" />
+     <Compile Include="Assets\ItemBlock.cs" />
      <Compile Include="Assets\ItemGenerator.cs" />
      <Compile Include="Assets\ItemShape.cs" />
      <Compile Include="Assets\Libraries\GUI\Scripts\Interaction\EnvelopContent.cs" />
