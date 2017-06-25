@@ -86,6 +86,8 @@
 -define:ENABLE_NATIVE_ARRAY_CHECKS
 -define:UNITY_TEAM_LICENSE
 'Assets/GameController.cs'
+'Assets/ItemGenerator.cs'
+'Assets/ItemShape.cs'
 'Assets/Libraries/GUI/Scripts/Interaction/EnvelopContent.cs'
 'Assets/Libraries/GUI/Scripts/Interaction/LanguageSelection.cs'
 'Assets/Libraries/GUI/Scripts/Interaction/TypewriterEffect.cs'

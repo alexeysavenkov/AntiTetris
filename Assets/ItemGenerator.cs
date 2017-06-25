@@ -35,9 +35,20 @@ public class ItemGenerator : MonoBehaviour {
 
 		var newInstance = GameObject.Instantiate (prototype);
 		newInstance.transform.localPosition = position.localPosition;
-		GetComponentsInChildren<SpriteRenderer> ().ToList ().ForEach (spriteRenderer => spriteRenderer.color = color);
+		var spriteRenderers = newInstance.GetComponentsInChildren<SpriteRenderer> ().ToList ();
+		Debug.Log (spriteRenderers.Count);
+		spriteRenderers.ForEach ( spriteRenderer => {
+			Debug.Log(spriteRenderer.gameObject.name);
+			spriteRenderer.color = color;
+		});
+
+		randomRotate (newInstance);
 
 		return newInstance;
+	}
+
+	private void randomRotate(GameObject obj) {
+		obj.transform.Rotate (0, 0, 90 * (int)(Random.value * 4));
 	}
 
 

@@ -15,6 +15,11 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void generateNextItem() {
+		if (nextItem != null) {
+			nextItem.transform.localPosition = itemStartPosition.localPosition;
+			nextItem.GetComponent<Rigidbody2D> ().gravityScale = 1;
+		}
+
 		nextItem = itemGenerator.instantiateRandomItem (itemNextPosition);
 		nextItem.GetComponent<Rigidbody2D> ().gravityScale = 0;
 	}
@@ -24,6 +29,7 @@ public class GameController : MonoBehaviour {
 		cleanupTransforms ();
 		itemGenerator = this.GetComponent<ItemGenerator> ();
 
+		generateNextItem ();
 		generateNextItem ();
 	}
 	
