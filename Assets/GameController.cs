@@ -125,6 +125,10 @@ public class GameController : MonoBehaviour {
 		updateLabels ();
 
 		if (score < 0) {
+			var prevHighScoreMaxLevel = PlayerPrefs.GetInt ("HighScoreMaxLevel", 0);
+			PlayerPrefs.SetInt ("HighScoreMaxLevel", Mathf.Max (level, prevHighScoreMaxLevel));
+			PlayerPrefs.SetInt ("PrevMaxLevel", level);
+
 			SceneManager.LoadScene ("GameOverScene");
 		}
 	}
