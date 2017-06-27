@@ -51,6 +51,7 @@
      <Compile Include="Assets\ItemBlock.cs" />
      <Compile Include="Assets\ItemGenerator.cs" />
      <Compile Include="Assets\ItemShape.cs" />
+     <Compile Include="Assets\ItemSpawner.cs" />
      <Compile Include="Assets\Libraries\GUI\Scripts\Interaction\EnvelopContent.cs" />
      <Compile Include="Assets\Libraries\GUI\Scripts\Interaction\LanguageSelection.cs" />
      <Compile Include="Assets\Libraries\GUI\Scripts\Interaction\TypewriterEffect.cs" />

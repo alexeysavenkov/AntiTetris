@@ -16,6 +16,8 @@ public class ItemBlock : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D collider) {
 		var item = this.transform.parent.gameObject;
-		GameController.current.onItemCollide (item);
+		if (GameController.current != null) {
+			GameController.current.onItemCollide (item);
+		}
 	}
 }

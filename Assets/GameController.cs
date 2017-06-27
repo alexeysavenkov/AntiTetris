@@ -146,7 +146,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	private IEnumerator generateNextItemCoroutine() {
-		yield return new WaitForSeconds(1.25f / level);
+		yield return new WaitForSeconds(Mathf.Max(.6f, 1.25f - .25f * level));
 		generateNextItem ();
 		nextItemPending = false;
 	}
